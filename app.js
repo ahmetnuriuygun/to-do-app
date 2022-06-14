@@ -1,46 +1,56 @@
 
-let counter = 0
+
 const listUl= document.querySelector("#todo-ul");
 const toDoInput = document.querySelector("#todo-input");
-document.querySelector("#todo-button").onclick=()=>{
-    
-    //! I assign the input box and list variables to a variable then I wrote the code that add to the list a new 'to do' 
+const toDoButton = document.querySelector("#todo-button")
+//! I assign the input box,list variables and 'add' button to a variable.I also give a "counter" variable to use later in my code for to lenght of completed. 
+let liste = []
+toDoButton.addEventListener("click", () =>{
+    if(!toDoInput.value){
+        alert("Please enter a to do")
+    }else{
+        liste.push(toDoInput.value);
+        console.log(liste);
+        showList();
+    };
+});
 
-    
-    listUl.innerHTML += `
+const showList=()=>{
+    {
+        listUl.innerHTML += `
     <li>
-    <i class="fa-regular fa-circle-check fa-lg" id="check" ></i>
-        <p class="toDoText">${toDoInput.value}</p>
-        <i class="fa fa-trash-alt fa-lg"></i>
+        <i class="fa-regular fa-circle-check fa-lg"></i>
+        <p class="toDoText">${liste}</p>
+        <i class="fa fa-trash fa-lg"></i>
     </li>`;
+    };
+
+    deletedIcon();
+    checkedIcon();
+    
     toDoInput.value = "";
-    
-  
-    //! I write the total lenght of li elements
-    document.querySelector(".total").textContent= document.querySelectorAll("#todo-ul li").length
-} 
+    toDoInput.focus();
+};
 
-listUl.onclick=()=>{
-const checkedIcon = document.querySelector(".fa-circle-check")
-checkedIcon.onclick=()=>{
-    const textStyle = document.querySelector(".toDoText")
-    checkedIcon.style.color= "green";
-    textStyle.style.textDecoration = "line-through";
-    textStyle.style.color = "gray";
-    textStyle.style.fontSize = "18px";
-    counter++
-    document.querySelector(".completed").textContent = counter}
 
-const deletedIcon = document.querySelector(".fa-trash-alt")
-deletedIcon.onclick=()=>{
-    counter--
-    document.querySelector(".completed").textContent = counter
-    const listUl= document.querySelector("#todo-ul");
-    listUl.parentNode.removeChild(listUl)
-}
-}
+const deletedIcon = () =>{
+    const deleted = document.querySelectorAll(".fa-trash");
+    deleted.forEach((del)=>{del.onclick=()=>{
+        liste.splice(del,1);
+        del.parentNode.remove();
+        console.log(liste);
+        
+    };});
+};
 
-    
+const checkedIcon = ()=>{
+const check = document.querySelectorAll(".fa-circle-check");
+check.forEach((check) => {
+    check.onclick=()=>{
+        check.parentNode.classList.toggle("checked"); 
+    };
+    });
+};
 
 
 
