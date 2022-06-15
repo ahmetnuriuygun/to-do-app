@@ -1,56 +1,72 @@
+let liste = [];
 
+let total=0;
 
-const listUl= document.querySelector("#todo-ul");
-const toDoInput = document.querySelector("#todo-input");
-const toDoButton = document.querySelector("#todo-button")
-//! I assign the input box,list variables and 'add' button to a variable.I also give a "counter" variable to use later in my code for to lenght of completed. 
-let liste = []
-toDoButton.addEventListener("click", () =>{
-    if(!toDoInput.value){
-        alert("Please enter a to do")
+let completed=0;
+
+const listeInput= document.querySelector("#todo-input");
+const listeUl= document.querySelector("#todo-ul");
+const listeButon= document.querySelector("#todo-button");
+const toplam = document.querySelector("#toplam")
+
+listeButon.onclick=()=>{
+    if(!listeInput.value){
+        alert("Please enter a value")
+    }else if(liste.includes(listeInput.value)){
+        return;
     }else{
-        liste.push(toDoInput.value);
-        console.log(liste);
-        showList();
-    };
-});
-
-const showList=()=>{
-    {
-        listUl.innerHTML += `
-    <li>
-        <i class="fa-regular fa-circle-check fa-lg"></i>
-        <p class="toDoText">${liste}</p>
-        <i class="fa fa-trash fa-lg"></i>
-    </li>`;
-    };
-
-    deletedIcon();
-    checkedIcon();
+        liste.push(listeInput.value)
+        total+=1
+    }
     
-    toDoInput.value = "";
-    toDoInput.focus();
-};
+showListe();
+}
 
+const showListe=()=>{
+    listeUl.innerHTML+=`
+    <li>
+    <i class="fa fa-check fa-lg"></i>
+    <p>${listeInput.value}</p>
+    <i class="fa fa-trash fa-lg"></i>`
 
-const deletedIcon = () =>{
-    const deleted = document.querySelectorAll(".fa-trash");
-    deleted.forEach((del)=>{del.onclick=()=>{
-        liste.splice(del,1);
-        del.parentNode.remove();
-        console.log(liste);
-        
-    };});
-};
-
-const checkedIcon = ()=>{
-const check = document.querySelectorAll(".fa-circle-check");
-check.forEach((check) => {
-    check.onclick=()=>{
-        check.parentNode.classList.toggle("checked"); 
-    };
-    });
-};
+    toplam.textContent= total;
+    
+    listeInput.value="";
+    listeInput.focus();
 
 
 
+    createSilButon()
+    createCheckButon()
+    
+}
+
+const createSilButon=()=>{
+    const deleteButon = document.querySelectorAll(".fa-trash");
+    for(let i in deleteButon){
+        deleteButon[i].onclick=()=>{
+            liste.splice(i,1)
+            deleteButon[i].parentElement.remove()
+            total=total-1;
+            toplam.textContent=total;
+            if(completed>0 && deleteButon[i].parentElement.className.includes("checked")){
+                completed=completed-1
+                document.querySelector("#tamamlanan").textContent=completed; 
+            }
+        }
+    }
+}
+
+const createCheckButon=()=>{
+    document.querySelectorAll(".fa-check").forEach((check)=>{
+        check.onclick=()=>{
+            check.parentElement.classList.toggle("checked")
+            if(check.parentElement.className.includes("checked")){
+                completed=completed+1;
+            }else{
+                completed=completed-1
+            }
+            document.querySelector("#tamamlanan").textContent=completed;
+        }
+    })
+}
